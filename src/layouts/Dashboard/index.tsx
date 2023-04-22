@@ -16,7 +16,13 @@ const Dashboard = () => {
       {/* Top Nav */}
       <div
         id="dashTop"
-        className="fixed bg-white w-full h-fit px-3 shadow-md flex flex-col"
+        className={classNames(
+          appConfig ? "text-gray-300" : "text-gray-700",
+          "fixed w-full h-fit px-3 shadow-md flex flex-col"
+        )}
+        style={{
+          backgroundColor: appConfig ? appConfig?.mainColor : "white",
+        }}
       >
         <div className="flex justify-between py-4">
           {/* Logo */}
@@ -56,7 +62,7 @@ const Dashboard = () => {
                       key={navItem.title}
                       onClick={() => setActiveNav(navItem.href)}
                       className={classNames(
-                        isActive ? "text-blue-800 font-bold" : "",
+                        isActive ? "text-yellow-500 font-bold" : "",
                         "py-2 text-sm"
                       )}
                     >
