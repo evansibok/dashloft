@@ -52,6 +52,18 @@ export const productState = createSlice({
       state.error = error;
       state.appConfig = data;
     },
+    updateProductStart: (state) => {
+      state.loading = true;
+    },
+    updateProductFail: (state, { payload: { error } }) => {
+      state.loading = false;
+      state.error = error;
+    },
+    updateProductSuccess: (state, { payload: { error, data } }) => {
+      state.loading = false;
+      state.error = error;
+      state.product = { ...state.product, ...data };
+    },
   },
 });
 
@@ -65,6 +77,9 @@ export const {
   fetchAppConfigFail,
   fetchAppConfigStart,
   fetchAppConfigSuccess,
+  updateProductFail,
+  updateProductStart,
+  updateProductSuccess,
 } = productState.actions;
 
 export default productState.reducer;

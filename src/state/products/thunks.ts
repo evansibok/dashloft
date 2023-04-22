@@ -1,4 +1,5 @@
 import { AppDispatch } from "..";
+import { Product } from "../types";
 import {
   fetchAppConfigStart,
   fetchAppConfigSuccess,
@@ -8,6 +9,9 @@ import {
   fetchTrlFail,
   fetchTrlStart,
   fetchTrlSuccess,
+  updateProductFail,
+  updateProductStart,
+  updateProductSuccess,
 } from "./reducer";
 
 export const getProduct = async (
@@ -53,6 +57,28 @@ export const getAppConfig = async (dispatch: AppDispatch, baseURL: string) => {
     return data;
   } catch (error: any) {
     dispatch(fetchProductFail({ error: error.message }));
+    console.error(error);
+    return error.message;
+  }
+};
+
+export const modifyProduct = async (
+  dispatch: AppDispatch,
+  baseURL: string,
+  productId: number,
+  form: Product
+) => {
+  try {
+    dispatch(updateProductStart());
+    const response = await fetch(`${baseURL}/product/${productId}/`, {
+      method: "PUT",
+      body: JSON.stringify(form),
+    });
+    await response.json();
+    // Manually saving product form to redux since endpoint doesn't change data
+    dispatch(updateProductSuccess({ data: form, error: null }));
+  } catch (error: any) {
+    dispatch(updateProductFail({ error: error.message }));
     console.error(error);
     return error.message;
   }

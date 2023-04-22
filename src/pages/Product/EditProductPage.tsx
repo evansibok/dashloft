@@ -2,9 +2,13 @@ import { Link } from "react-router-dom";
 import { useProduct } from "../../hooks";
 import { ChangeEvent, useState } from "react";
 import { PencilSquareIcon } from "@heroicons/react/24/outline";
+import { useAppDispatch } from "../../state";
+import { baseURL } from "../../utils/constants";
+import { modifyProduct } from "../../state/products/thunks";
 
 const EditProductPage = () => {
-  const { product } = useProduct();
+  const dispatch = useAppDispatch();
+  const { product, loading } = useProduct();
   const [editForm, setEditForm] = useState({
     name: false,
     description: false,
@@ -60,12 +64,45 @@ const EditProductPage = () => {
               <textarea
                 rows={10}
                 name="description"
-                className="text-sm pl-2 border-2 border-indigo-400 rounded-md"
+                className="text-sm p-2 border-2 border-indigo-400 rounded-md"
                 placeholder={productForm.description}
                 value={productForm.description}
                 onChange={onHandleChange}
               />
-              <div className="flex gap-2 self-end items-center"></div>
+              <div className="flex gap-2 self-end items-center">
+                {loading && (
+                  <span className="text-xs text-indigo-400">Saving...</span>
+                )}
+                <button
+                  className="text-indigo-500 text-xs py-1 px-2 rounded-md"
+                  onClick={() => {
+                    setEditForm({
+                      ...editForm,
+                      name: false,
+                      description: false,
+                    });
+                    setProductForm({
+                      ...productForm,
+                      name: product?.name,
+                    });
+                  }}
+                >
+                  Cancel
+                </button>
+                <button
+                  className="bg-gray-200 text-indigo-500 text-xs py-1 px-2 rounded-md"
+                  onClick={async () => {
+                    await modifyProduct(dispatch, baseURL, 6781, productForm);
+                    setEditForm({
+                      ...editForm,
+                      name: false,
+                      description: false,
+                    });
+                  }}
+                >
+                  Save
+                </button>
+              </div>
             </>
           ) : (
             <>

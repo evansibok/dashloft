@@ -8,7 +8,7 @@ export const useAppConfig = () => {
 };
 
 export const useProduct = () => {
-  const { product } = useSelector((state: State) => state.product);
+  const { product, loading } = useSelector((state: State) => state.product);
 
-  return { product };
+  return { product, loading };
 };
