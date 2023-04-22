@@ -76,7 +76,47 @@ const Dashboard = () => {
         )}
       </div>
 
-      <Outlet />
+      {/* Dash Bottom */}
+      <div
+        id="dashBottom"
+        className="h-full flex bg-gray-100 lg:pt-14 lg:w-[1024px] lg:mx-auto"
+      >
+        {/* desktop sidebar */}
+        <div id="sidebar" className="hidden lg:flex fixed w-40 pt-20 h-full">
+          <nav className="w-full">
+            <ul className="flex flex-col gap-6 text-sm">
+              {navigation.map((navItem) => {
+                const isActive =
+                  pathname.includes(navItem.href) && activeNav === navItem.href;
+
+                return (
+                  <li
+                    key={navItem.href}
+                    className={classNames(
+                      isActive ? "text-blue-800 font-bold" : "",
+                      "w-full hover:text-blue-800 "
+                    )}
+                    onClick={() => setActiveNav(navItem.href)}
+                  >
+                    <Link
+                      to={navItem.href}
+                      className="w-full flex gap-2 items-center pl-5"
+                    >
+                      <navItem.icon className="w-5 h-5" />
+                      {navItem.title}
+                    </Link>
+                  </li>
+                );
+              })}
+            </ul>
+          </nav>
+        </div>
+
+        {/* main content */}
+        <main className="pt-16 lg:pt-5 h-full bg-gray-100 w-full lg:ml-40">
+          <Outlet />
+        </main>
+      </div>
     </div>
   );
 };
