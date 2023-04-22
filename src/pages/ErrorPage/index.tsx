@@ -5,14 +5,14 @@ const ErrorPage = () => {
 
   if (isRouteErrorResponse(error)) {
     return (
-      <div style={{ display: "flex", flexDirection: "column" }}>
+      <div className="flex flex-col items-center">
         <h1>{error.status}</h1>
         <p>{error.statusText}</p>
       </div>
     );
   } else {
     return (
-      <div>
+      <div className="flex flex-col items-center">
         <h1>Oops!</h1>
         <p>Something went wrong.</p>
       </div>
