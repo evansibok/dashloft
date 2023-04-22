@@ -1,3 +1,19 @@
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
+
+:root {
+  @apply h-screen min-h-screen max-h-full;
+}
+
+html {
+  @apply h-full;
+}
+
+body {
+  @apply h-full;
+}
+
+main {
+  @apply h-full min-h-screen;
+}

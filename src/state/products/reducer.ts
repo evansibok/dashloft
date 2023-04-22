@@ -7,6 +7,7 @@ const initialState: ProductState = {
   error: null,
   product: null,
   trl: null,
+  appConfig: null,
 };
 
 export const productState = createSlice({
@@ -39,6 +40,18 @@ export const productState = createSlice({
       state.loading = false;
       state.error = error;
     },
+    fetchAppConfigStart: (state) => {
+      state.loading = true;
+    },
+    fetchAppConfigFail: (state, { payload: { error } }) => {
+      state.loading = false;
+      state.error = error;
+    },
+    fetchAppConfigSuccess: (state, { payload: { error, data } }) => {
+      state.loading = false;
+      state.error = error;
+      state.appConfig = data;
+    },
   },
 });
 
@@ -49,6 +62,9 @@ export const {
   fetchTrlFail,
   fetchTrlStart,
   fetchTrlSuccess,
+  fetchAppConfigFail,
+  fetchAppConfigStart,
+  fetchAppConfigSuccess,
 } = productState.actions;
 
 export default productState.reducer;

@@ -3,6 +3,7 @@ export interface ProductState {
   error: string | null;
   product: Product | null;
   trl: TRL | null;
+  appConfig: AppConfig | null;
 }
 
 export interface Product {
@@ -13,4 +14,15 @@ export interface TRL {
   id: string;
   name: string;
   description?: string;
+}
+
+export interface AppConfig {
+  id: string;
+  logo: string;
+  mainColor: string;
+  hasUserSection: boolean;
+}
+
+export interface State {
+  product: ProductState;
 }
