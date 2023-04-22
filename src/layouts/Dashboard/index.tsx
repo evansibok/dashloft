@@ -27,12 +27,15 @@ const Dashboard = () => {
         <div className="flex justify-between py-4">
           {/* Logo */}
           <div
-            className={classNames(Number(appConfig?.id) === 2 ? "w-8" : "w-24")}
+            className={classNames(
+              Number(appConfig?.id) === 2 ? "w-8" : "w-24",
+              ""
+            )}
           >
             <img
               src={appConfig?.logo}
-              alt="danny-logo"
-              className="w-full text-white"
+              alt="app-logo"
+              className="w-full brightness-200 saturate-200"
             />
           </div>
 
