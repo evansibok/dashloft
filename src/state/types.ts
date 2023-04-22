@@ -2,7 +2,7 @@ export interface ProductState {
   loading: boolean;
   error: string | null;
   product: Product | null;
-  trl: TRL | null;
+  trl: TRL[] | null;
   appConfig: AppConfig | null;
 }
 

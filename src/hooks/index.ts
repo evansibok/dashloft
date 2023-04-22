@@ -12,3 +12,8 @@ export const useProduct = () => {
 
   return { product, loading };
 };
+
+export const useTrl = () => {
+  const { trl, loading } = useSelector((state: State) => state.product);
+  return { trl, loading };
+};

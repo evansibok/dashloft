@@ -18,7 +18,6 @@ export const productState = createSlice({
       state.loading = true;
     },
     fetchProductSuccess: (state, { payload: { data, error } }) => {
-      console.log("product->success", data);
       state.loading = false;
       state.product = data;
       state.error = error;
@@ -31,7 +30,6 @@ export const productState = createSlice({
       state.loading = true;
     },
     fetchTrlSuccess: (state, { payload: { data, error } }) => {
-      console.log("trl->success", data);
       state.loading = false;
       state.trl = data;
       state.error = error;

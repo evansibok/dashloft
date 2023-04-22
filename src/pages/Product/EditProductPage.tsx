@@ -1,7 +1,12 @@
 import { Link } from "react-router-dom";
-import { useProduct } from "../../hooks";
 import { ChangeEvent, useState } from "react";
-import { PencilSquareIcon, XMarkIcon } from "@heroicons/react/24/outline";
+import {
+  ChevronDownIcon,
+  PencilSquareIcon,
+  XMarkIcon,
+} from "@heroicons/react/24/outline";
+
+import { useAppConfig, useProduct, useTrl } from "../../hooks";
 import { useAppDispatch } from "../../state";
 import { baseURL } from "../../utils/constants";
 import { modifyProduct } from "../../state/products/thunks";
@@ -14,22 +19,27 @@ interface Type {
 const EditProductPage = () => {
   const dispatch = useAppDispatch();
   const { product, loading } = useProduct();
+  const { trl } = useTrl();
+  const { appConfig } = useAppConfig();
   const [editForm, setEditForm] = useState({
     name: false,
     description: false,
     categories: false,
     businessModels: false,
+    trl: false,
   });
   const [productForm, setProductForm] = useState({
     name: product?.name || "",
     description: product?.description || "",
     categories: product?.categories || "",
     businessModels: product?.businessModels || "",
+    trl: product?.trl || "",
   });
   const [typeForm, setTypeForm] = useState<Type>({
     id: "",
     name: "",
   });
+  const [showDropDown, setShowDropDown] = useState(false);
 
   const onHandleChange = (
     evt: ChangeEvent<HTMLInputElement | HTMLTextAreaElement>
@@ -54,7 +64,6 @@ const EditProductPage = () => {
   };
 
   const removeCategory = (cat: Type) => {
-    console.log("remove->cat", cat);
     setProductForm({
       ...productForm,
       categories: [
@@ -66,7 +75,6 @@ const EditProductPage = () => {
   };
 
   const addCategory = (cat: Type) => {
-    console.log("add->cat", cat);
     setProductForm({
       ...productForm,
       categories: [...productForm.categories, cat],
@@ -75,7 +83,6 @@ const EditProductPage = () => {
   };
 
   const removeModel = (model: Type) => {
-    console.log("remove->model", model);
     setProductForm({
       ...productForm,
       businessModels: [
@@ -87,7 +94,6 @@ const EditProductPage = () => {
   };
 
   const addModel = (model: Type) => {
-    console.log("add->model", model);
     setProductForm({
       ...productForm,
       businessModels: [...productForm.businessModels, model],
@@ -95,10 +101,16 @@ const EditProductPage = () => {
     setTypeForm({ id: "", name: "" });
   };
 
-  console.log("productForm->", productForm);
+  const setTrl = (trl: Type) => {
+    setProductForm({
+      ...productForm,
+      trl,
+    });
+    setShowDropDown(false);
+  };
 
   return (
-    <div className=" flex flex-col gap-5 w-full px-3">
+    <div className=" flex flex-col gap-5 w-full px-3 mb-5">
       <Link
         to="/product"
         className="bg-indigo-500 text-white text-sm py-1 px-2 rounded-md flex self-end"
@@ -365,8 +377,132 @@ const EditProductPage = () => {
               </p>
             )}
           </div>
+
+          <div className="flex flex-col gap-2">
+            <p className="flex items-center gap-1 text-sm">
+              TRL{" "}
+              {!editForm.trl ? (
+                <PencilSquareIcon
+                  className="w-4 h-4 hover:cursor-pointer"
+                  onClick={() => setEditForm({ ...editForm, trl: true })}
+                />
+              ) : (
+                <span className="flex gap-2 self-end items-center">
+                  <button
+                    onClick={() => {
+                      setEditForm({ ...editForm, trl: false });
+                      setProductForm({
+                        ...productForm,
+                        trl: product?.trl,
+                      });
+                    }}
+                    className="text-indigo-500 text-xs py-1 px-2 rounded-md flex self-end"
+                  >
+                    Cancel
+                  </button>
+                  <button
+                    onClick={async () => {
+                      await modifyProduct(dispatch, baseURL, 6781, productForm);
+                      setEditForm({ ...editForm, trl: false });
+                    }}
+                    className="bg-gray-200 text-indigo-500 text-xs py-1 px-2 rounded-md"
+                  >
+                    Save
+                  </button>
+                  {loading && (
+                    <span className="text-xs text-indigo-400">Saving...</span>
+                  )}
+                </span>
+              )}
+            </p>
+
+            {/* Edit Trl */}
+            {editForm.trl ? (
+              <>
+                <p className="bg-gray-200 text-xs text-gray-500 py-1 px-2 rounded-lg flex self-start">
+                  {productForm?.trl?.name}
+                </p>
+
+                <div className="relative">
+                  <button
+                    className="bg-indigo-500 text-white text-xs py-1 px-2 rounded-md flex self-end gap-1"
+                    onClick={() => setShowDropDown(!showDropDown)}
+                  >
+                    Change TRL
+                    <ChevronDownIcon className="w-4 h-4" />
+                  </button>
+                  {showDropDown && (
+                    <div className="absolute bg-white w-full lg:w-1/2 shadow-md border rounded-md border-gray-200 flex flex-col h-48 overflow-y-auto">
+                      {trl?.map((t: Type) => {
+                        return (
+                          <div
+                            key={t.name}
+                            className="text-sm px-3 py-2 text-gray-500 hover:cursor-pointer hover:bg-gray-100 hover:text-indigo-500"
+                            onClick={() => setTrl(t)}
+                          >
+                            <p>{t.name}</p>
+                          </div>
+                        );
+                      })}
+                    </div>
+                  )}
+                </div>
+              </>
+            ) : (
+              <p className="bg-gray-200 text-xs text-gray-500 py-1 px-2 rounded-lg flex self-start">
+                {product?.trl?.name}
+              </p>
+            )}
+          </div>
+
+          <div className="flex flex-col gap-2">
+            <p className="text-sm">Costs</p>
+            <p className="bg-gray-200 text-xs text-gray-500 py-1 px-2 rounded-lg flex self-start">
+              {product?.investmentEffort}
+            </p>
+          </div>
         </div>
       </div>
+
+      {/* Video section */}
+      <div className="bg-white w-full border border-gray-200 rounded-md px-2 py-4">
+        <p>Video</p>
+        <div className="w-full lg:h-[500px] mt-2">
+          <iframe
+            className="w-full h-full"
+            src={product?.video.replace("watch?v=", "embed/")}
+            title="product video"
+            allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+            allowFullScreen
+          />
+        </div>
+      </div>
+
+      {/* User Details */}
+      {appConfig?.hasUserSection && (
+        <div className="flex flex-col gap-4 bg-white w-full border border-gray-200 px-2 py-4 rounded-md">
+          <p>Presented by:</p>
+          <div>
+            <div className="flex items-center">
+              <div className="w-10 h-10 mr-4">
+                <img
+                  src={product?.user?.profilePicture}
+                  className="w-full rounded-full"
+                  alt="user image"
+                />
+              </div>
+              <div className="text-gray-400 text-sm font-light">
+                <p className="text-gray-500 font-medium">
+                  {product?.user?.firstName} {product?.user?.lastName}
+                </p>
+                <p>{product?.company?.name}</p>
+              </div>
+            </div>
+            {/* Map Section */}
+            <div></div>
+          </div>
+        </div>
+      )}
     </div>
   );
 };

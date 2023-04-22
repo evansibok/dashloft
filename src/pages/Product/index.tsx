@@ -6,7 +6,7 @@ const ProductPage = () => {
   const { appConfig } = useAppConfig();
 
   return (
-    <div className="flex flex-col gap-5 w-full px-3">
+    <div className="flex flex-col gap-5 w-full px-3 mb-5">
       <Link
         to="edit"
         className="bg-indigo-500 text-white text-sm py-1 px-2 rounded-md flex self-end"
