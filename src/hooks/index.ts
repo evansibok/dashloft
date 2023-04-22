@@ -6,3 +6,9 @@ export const useAppConfig = () => {
 
   return { appConfig };
 };
+
+export const useProduct = () => {
+  const { product } = useSelector((state: State) => state.product);
+
+  return { product };
+};
